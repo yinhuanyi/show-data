@@ -2,26 +2,25 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 
+// 将VueRouter绑定到Vue中
 Vue.use(VueRouter)
 
+// 这里是路由的规则
 const routes = [
   {
+    // 路由路径
     path: '/',
+    // 路由名称
     name: 'Home',
+    // 路由到哪个组件
     component: Home
-  },
-  {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   }
 ]
 
+// 基于VueRouter组件和routes规则创建一个router实例
 const router = new VueRouter({
   routes
 })
 
+// 暴露实例
 export default router
