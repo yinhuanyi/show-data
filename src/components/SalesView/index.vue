@@ -5,7 +5,7 @@
       <!-- 在Card样式组件里面，name为header的slot，可以将Card组件分为两个部分，一个是头部一个内容 -->
       <template v-slot:header>
         <div class="menu-wrapper">
-          <!-- ①：左边菜单 -->
+          <!-- ①：左边memu -->
           <!-- 在头部引入Menu组件，且有两个item，mode设置item是水平排列，default-active设置哪个item被选中，
           select回调方法，是当item被点击后，调用指定的onMenuselect方法
            -->
@@ -13,6 +13,7 @@
           <el-menu mode="horizontal"
                    :default-active="activeIndex"
                    @select="onMenuselect"
+                   class="sales-view-menu"
           >
             <el-menu-item index="1">销售额</el-menu-item>
             <el-menu-item index="2">访问量</el-menu-item>
@@ -25,7 +26,8 @@
               <el-radio-button label="本月" />
               <el-radio-button label="本年" />
             </el-radio-group>
-            <!-- ③：右边单选框 -->
+            <!-- ③：右边单选框, picker-options用于快速显示时间 -->
+            <!-- unlink-panel会把两个时间段，选择时间分开选择，不会联动 -->
             <el-date-picker
               type="daterange"
               v-model="date"
@@ -33,7 +35,9 @@
               start-placeholder="开始日期"
               end-placeholder="结束日期"
               size="small"
+              unlink-panels
               :picker-options="pickerOptions"
+              class="sales-view-date-picker"
             />
           </div>
         </div>
@@ -75,7 +79,10 @@
                 const end = new Date()
                 // 让start时间向前推进7天
                 start.setTime(start.getTime() - 1000 * 3600 * 24 * 7)
-                picker.$emit('pick', [start, end])
+                // 这里可以开启调试模式，需要打开调试模式才有用
+                debugger
+                // true表示选择【最近一周】后，依然不会关闭日期面板
+                picker.$emit('pick', [start, end], true)
               }
             },
             {
@@ -102,14 +109,44 @@
 </script>
 
 <style lang="scss" scoped>
-  // 3： 设置图表大小
+   // 1：任何有echarts绘图的地方需要加上这个
   .echarts {
     width: 100%;
     height: 100%;
   }
+   // 2：这个样式控制整个View
   .sales-view {
     margin-top: 20px;
+    .menu-wrapper {
+      // relative是相对自己之前的位置进行偏移
+      position: relative;
+      display: flex;
+      // 这里可以让下划线为100%
+      .sales-view-menu {
+        width: 100%;
+        padding-left: 20px;
+        //
+        .el-menu-item {
+          height: 50px;
+          line-height: 50px;
+          margin: 0 20px;
+        }
+      }
+      .menu-right {
+        position: absolute;
+        top: 0;
+        right: 20px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        .sales-view-date-picker {
+          margin-left: 20px;
+        }
+      }
+    }
   }
+  // 3：这个样式控制View中的头部
   .menu-wrapper {
     display: flex;
   }

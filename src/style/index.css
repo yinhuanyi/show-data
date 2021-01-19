@@ -3,3 +3,8 @@
     height: 100%;
 
 }
+/*这里是调整【销售额】和【访问量】的样式*/
+.el-card__header {
+    border-bottom: none;
+    padding: 0;
+}
