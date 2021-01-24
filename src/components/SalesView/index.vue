@@ -115,34 +115,42 @@
             }
           ]
         },
+        // 左边的柱状图
         chartOption: {
+          // 设置title
           title: {
             text: '年度销售额',
             textStyle: {
               fontSize: 12,
               color: '#666'
             },
-            left: 25,
+            left: "center",
             top: 20,
           },
+          // 设置x轴坐标
           xAxis: {
             type: 'category',
             data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+            // 设置刻度线样式
             axisTick: {
-              alighWithLabel: true,
+              // show: false, 这属性可以设置刻度线的显示和隐藏
+              alignWithLabel: true,
               lineStyle: {
                 color: '#999'
               }
             },
+            // 设置刻度线的颜色
             axisLine: {
               lineStyle: {
                 color: '#999'
               }
             },
+            // 设置标签的样式
             axisLabel: {
               color: '#333'
             }
           },
+          // 设置y轴坐标
           yAxis: {
             axisLine: {
               show: false
@@ -150,6 +158,7 @@
             axisTick: {
               show: false
             },
+            // 设置y轴在grid中的分割线
             splitLine: {
               lineStyle: {
                 type: 'dotted',
@@ -161,10 +170,11 @@
             {
               type: 'bar',
               barWidth: '35%',
-              data: [200, 250, 300, 350, 200, 250, 300, 350, 200, 250, 300, 350, ]
+              data: [200, 250, 300, 1050, 200, 250, 300, 350, 200, 250, 300, 350, ]
             }
           ],
           color: ['#339874'],
+          // 设置直角坐标系内绘图网格
           grid: {
             top: 70,
             left: 60,
@@ -172,6 +182,7 @@
             bottom: 50
           }
         },
+        // 右边排名的数据
         rankData: [
           {
             no: 1,
@@ -322,7 +333,6 @@
           }
         }
       }
-
     }
   }
 </style>

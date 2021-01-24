@@ -30,9 +30,9 @@ export default {
         },
         series: [{
           type: 'line',
-          data: [532, 240, 124, 290, 149, 267, 243, 154, 255, 249],
+          data: [1032, 240, 124, 390, 149, 267, 243, 154, 255, 249, 1032, 240, 124, 390, 149, 267, 243, 154, 255, 249],
           areaStyle: {
-            color: 'purple'
+            color: 'rgba(95, 187, 255, .5)'
           },
           smooth: true,
           lineStyle: {

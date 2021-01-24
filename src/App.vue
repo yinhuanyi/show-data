@@ -1,14 +1,24 @@
 <template>
   <div id="app">
     <router-view />
+<!--    <div>{{res.data}}</div>-->
   </div>
 </template>
 
 <script>
-
-export default {
-  name: 'app'
-}
+  export default {
+    // data () {
+    //   return {
+    //     res: 'asdfasdf'
+    //   }
+    // },
+    // mounted () {
+    //   this.axios.get('/screen/data').then((res) => {
+    //     console.log(res)
+    //     this.res = res
+    //   })
+    // }
+  }
 </script>
 
 <style lang="scss">

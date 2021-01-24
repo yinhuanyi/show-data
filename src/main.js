@@ -14,6 +14,12 @@ Vue.prototype.$echarts = require('echarts')
 
 Vue.component('v-chart', VueEcharts)
 
+// mock开关
+const mock = true
+if (mock) {
+  require('./mock/api')
+}
+
 new Vue({
   router,
   render: h => h(App)

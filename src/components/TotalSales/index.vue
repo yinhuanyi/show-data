@@ -1,37 +1,35 @@
 <template>
-  <!-- 使用mixin中的common-card组件 -->
-  <!-- title和value是给子组件传递的数据 -->
-  <common-card title="累计销售额" value="$ 1999">
-    <!-- 在chart这个slot里面，添加数据 -->
+  <common-card title="累计销售额" :value="'$ ' + salesToday">
     <template>
       <div class="compare-wrapper">
         <div class="compare">
           <span>日同比</span>
-          <span class="emphasis">7.33%</span>
+          <span class="emphasis">{{salesGrowthLastDay}}</span>
           <div class="increase" />
         </div>
         <div class="compare">
           <span>月同比</span>
-          <span class="emphasis">7.33%</span>
+          <span class="emphasis">{{salesGrowthLastMonth}}</span>
           <div class="decrease" />
         </div>
       </div>
     </template>
-    <!--  指定给子组件的footer插槽，添加数据  -->
     <template v-slot:footer>
       <span>昨日销售额：</span>
-      <span class="emphasis">$ 300</span>
+      <span class="emphasis">$ {{salesLastDay}}</span>
+      <!-- 在这里展示父组件的数据 -->
+<!--      <div>从父组件获取的数据：{{reportData}}</div>-->
     </template>
   </common-card>
-
 </template>
 
 <script>
-  // 导入mixin
   import commonCardMixin from '../../mixins/commonCardMixin'
-  // 应用mixin
+  // 引入mixin
+  import commonDataMixin from '@/mixins/commonDataMixin'
   export default {
-      mixins: [commonCardMixin]
+      // 使用mixin
+      mixins: [commonCardMixin, commonDataMixin]
   }
 </script>
 

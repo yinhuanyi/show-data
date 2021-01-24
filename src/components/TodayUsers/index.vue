@@ -18,10 +18,19 @@ export default {
   methods: {
     getOptions () {
       return {
+        title: {
+          text: '交易用户',
+          textStyle: {
+            fontSize: 12,
+            color: '#666'
+          },
+          left: 0,
+          bottom: -5
+        },
         color: ['green'],
         xAxis: {
           show: false,
-          data: ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00']
+          data: ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00']
         },
         yAxis: {
           show: false
@@ -30,13 +39,13 @@ export default {
           // 类型是折线图
           type: 'bar',
           // 指定数据，这里可以使用dataset替换
-          data: [532, 240, 124, 290, 149, 267, 243, 154, 255, 249],
+          data: [532, 240, 124, 290, 149, 267, 243, 154, 255, 249, 1000],
           barWidth: '60%'
         }],
         // 设置图表在div中的绝对定位
         grid: {
           top: 0,
-          bottom: 0,
+          bottom: 20,
           left: 0,
           right: 0
         }

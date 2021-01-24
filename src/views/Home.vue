@@ -1,6 +1,5 @@
 <template>
   <div class="home">
-    <!-- 在vue的语法中，引用组件，需要将驼峰的组件名改为小写，且用横线连接 -->
     <top-view />
     <sales-view />
     <bottom-view />
@@ -10,26 +9,59 @@
 
 <script>
 
-// 导入组件
 import TopView from '../components/TopView'
 import SalesView from '../components/SalesView'
 import BottomView from '../components/BottomView'
 import MapView from '../components/MapView'
+// 导入请求函数
+import { wordcloud, screenData, mapScatter } from '@/api'
 
 export default {
   name: 'Home',
-  // 加入到Home.vue的子组件中，如果不给子组件取名字，那么默认的名字就是<top-view />
   components: {
     TopView,
     SalesView,
     BottomView,
     MapView
+  },
+  data () {
+    return {
+      // 定义三个http接口返回的数据
+      reportData: null,
+      wordcloud: null,
+      mapData: null
+    }
+  },
+  // 定义provider需要传递的方法
+  methods: {
+    getReportData () {
+      return this.reportData
+    },
+    getWordcloud () {
+      return this.wordcloud
+    },
+    getMapData () {
+      return this.mapData
+    }
+  },
+  // 在父组件中，使用provide给子组件抛出数据
+  provide () {
+    return {
+      getReportData: this.getReportData,
+      getWordcloud: this.getWordcloud,
+      getMapData: this.getMapData
+    }
+  },
+  mounted () {
+    // 调用请求函数
+    screenData().then(data => { this.reportData = data })
+    wordcloud().then(data => { this.wordcloud = data })
+    mapScatter().then(data => { this.mapData = data })
   }
 }
 </script>
 
 <style>
-  /* 这里的样式会作用到template中 */
   .home {
     width: 100%;
     height: 100%;

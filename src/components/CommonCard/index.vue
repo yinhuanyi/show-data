@@ -37,7 +37,7 @@
     letter-spacing: 1px;
   }
   .chart{
-    height: 50px;
+    height: 80px;
     //background-color: red;
   }
   .line{
