@@ -106,12 +106,25 @@ export default {
       return wrapperArray(this.reportData, 'userRank')
     },
     // 第二个接口返回的数据
-    getWordcloud () {
+    wordCloud () {
+      // 调用父组件的方法，获取数据
       return this.getWordcloud()
     },
     // 第三个接口返回的数据
     getMapData () {
       return this.getMapData()
+    }
+  },
+  // 1: 这里对外提供一个format方法对Number进行千分位格式化
+  // methods: {
+  //   format (v) {
+  //     return format(v)
+  //   }
+  // },
+  // 2: 第二种方法也可以提供一个过滤器
+  filters: {
+    format (v) {
+      return format(v)
     }
   },
   inject: ['getReportData', 'getWordcloud', 'getMapData']

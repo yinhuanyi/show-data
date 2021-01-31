@@ -17,7 +17,7 @@
                 <!-- 图片的标题 -->
                 <div class="chart-title">搜索用户数</div>
                 <!-- 图片的数据 -->
-                <div class="chart-data">96,245</div>
+                <div class="chart-data">{{userCount | format}}</div>
                 <!-- 图片 -->
                 <v-chart :options="searchUserOption"/>
               </div>
@@ -26,7 +26,7 @@
                 <!-- 图片的标题 -->
                 <div class="chart-title">搜索量</div>
                 <!-- 图片的数据 -->
-                <div class="chart-data">96,245</div>
+                <div class="chart-data">{{searchCount | format}}</div>
                 <!-- 图片 -->
                 <v-chart :options="searchUserOption"/>
               </div>
@@ -40,11 +40,12 @@
                 <el-table-column prop="keyword" label="关键词" width="180" />
                 <el-table-column prop="count" label="总搜索量" />
                 <el-table-column prop="users" label="总搜用户数" />
+                <el-table-column prop="range" label="搜索占比" />
               </el-table>
               <!-- 定义分页 -->
               <el-pagination
                 layout="sizes, prev, pager, next"
-                :total="100"
+                :total="total"
                 :page-size="pageSize"
                 :page-sizes="[2, 4, 6, 8]"
                 background
@@ -83,63 +84,37 @@
 </template>
 
 <script>
+  import commonDataMixin from '@/mixins/commonDataMixin'
   export default {
+    mixins: [commonDataMixin],
     data () {
       return {
-        searchUserOption: {
-          xAxis: {
-            type: 'category',
-            boundaryGap: false
-          },
-          yAxis: {
-            show: false,
-            min: 0,
-            // 在实际开发过程中，需要将这个值设置为动态的
-            max: 1000
-          },
-          series: [
-            {
-              type: 'line',
-              data: [100, 150, 300, 120, 340, 323, 550, 13, 545, 573, 100],
-              areaStyle: {
-                color: 'rgba(95, 187, 255, .5)'
-              },
-              lineStyle: {
-                color: 'rgb(95, 187, 225)'
-              },
-              itemStyle: {
-                // 让折线图的点点隐藏
-                opacity: 0
-              },
-              smooth: true
-            }
-          ],
-          grid: {
-            top: 0,
-            left: 0,
-            bottom: 0,
-            right: 0
-          }
-        },
+        searchUserOption: {},
         searchNumberOption: {},
-        // 表格的数据源
-        tableData: [
-          { id: 1, rank: 1, keyword: '深圳', count: 1, users: 90, range: '90%' },
-          { id: 2, rank: 2, keyword: '北京', count: 2, users: 90, range: '90%' },
-          { id: 3, rank: 3, keyword: '上海', count: 3, users: 90, range: '90%' },
-          { id: 4, rank: 4, keyword: '长沙', count: 4, users: 90, range: '90%' }
-        ],
         radioSelect: '品类',
         categoryOptions: {},
-        pageSize: 2
+        /* TODO: 下面是表格相关的数据，这里的分页存在问题，因为是在前端做的分页，分页应该是后台做，这里请求的数据是全量数据 */
+        // 表格的数据源
+        tableData: [],
+        // 数据总数
+        total: 0,
+        // 默认的页面数据条数
+        pageSize: 4,
+        // 默认的当前页面
+        currentPage: 1,
+        /* 两个折线图的数值 */
+        userCount: 0,
+        searchCount: 0
       }
     },
     methods: {
       onPageChange (page) {
-        console.log(page)
+        this.currentPage = page
+        this.renderTable(this.currentPage)
       },
       handleSizeChange (val) {
         this.pageSize = val
+        this.renderTable(this.currentPage)
       },
       randerPieChar () {
         const mockData = [
@@ -247,20 +222,109 @@
             // 放在饼图就会触发
             trigger: 'item',
             formatter: function (params) {
-              console.log(params)
               const str = params.marker + params.data.legendname + '<br />' +
                 '数量：' + params.data.value + '<br />' + '占比：' + params.data.percent
               return str
             }
           }
         }
+      },
+      // 修改返回的表格数据的条数
+      renderTable (page) {
+        // 分页的目的就是将数据截断，slice是切割列表的起始位置和结束位置
+        this.tableData = this.totalData.slice(
+          (page - 1) * this.pageSize,
+          (page - 1) * this.pageSize + this.pageSize
+        )
+      },
+      renderLineChart () {
+        // 创建一个函数
+        const createOption = (key) => {
+          // 定义series的数据
+          const data = []
+          // 定义x轴的类别
+          const axis = []
+          // 给series数据赋值
+          this.wordCloud.forEach(item => data.push(item[key]))
+          // 给x轴类别赋值
+          this.wordCloud.forEach(item => axis.push(item.word))
+          return {
+            xAxis: {
+              type: 'category',
+              boundaryGap: false,
+              data: axis
+            },
+            yAxis: {
+              show: false,
+              min: 0
+              // 在实际开发过程中，需要将这个值设置为动态的
+              // max: 1000
+            },
+            series: [
+              {
+                type: 'line',
+                data,
+                areaStyle: {
+                  color: 'rgba(95, 187, 255, .5)'
+                },
+                lineStyle: {
+                  color: 'rgb(95, 187, 225)'
+                },
+                itemStyle: {
+                  // 让折线图的点点隐藏
+                  opacity: 0
+                },
+                smooth: true
+              }
+            ],
+            grid: {
+              top: 0,
+              left: 0,
+              bottom: 0,
+              right: 0
+            }
+          }
+        }
+        this.searchUserOption = createOption('user')
+        this.searchNumberOption = createOption('count')
       }
     },
     // 在组件挂载后调用
     mounted () {
       this.randerPieChar()
+    },
+    watch: {
+      // 监听wordCloud属性
+      wordCloud () {
+        const totalData = []
+        this.wordCloud.forEach((item, index) => {
+          totalData.push({
+            id: index + 1,
+            rank: index + 1,
+            keyword: item.word,
+            count: item.count,
+            users: item.user,
+            // 反引号是模板字符串
+            range: `${((item.user / item.count) * 100).toFixed(2)}%`
+          })
+        })
+        // 获取所有字段数据
+        this.totalData = totalData
+        // 获取数据总条数据
+        this.total = this.totalData.length
+        // 渲染表格，这里其实就是修改表格数据的条数
+        this.renderTable(this.currentPage)
+        /* 下面是计算搜索用户数和搜索量 */
+        // reduce方法需要传递两个参数，第一个参数是函数，第二个参数是s的初始值
+        // 使用第一种方式千分位Number数据，这个format方法是封装在commonDataMixin中的方法
+        // this.userCount = this.format(totalData.reduce((s, i) => i.users + s, 0))
+        // this.searchCount = this.format(totalData.reduce((s, i) => i.count + s, 0))
+        // 使用第二种方式使用format，那么这里不动，在template中完成数据的format
+        this.userCount = totalData.reduce((s, i) => i.users + s, 0)
+        this.searchCount = totalData.reduce((s, i) => i.count + s, 0)
+        this.renderLineChart()
+      }
     }
-
   }
 </script>
 

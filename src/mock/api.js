@@ -1,10 +1,18 @@
 import Mock from 'mockjs'
 
-Mock.mock('http://localhost:8080' + '/screen/wordcloud', {
-    status: 0,
-    username: 'wordcloud',
-    msg: ''
-})
+Mock.mock('http://localhost:8080' + '/screen/wordcloud', [
+  { word: '北京', user: 3, count: 210 },
+  { word: '深圳', user: 1, count: 230 },
+  { word: '湖南', user: 2, count: 240 },
+  { word: '上海', user: 3, count: 250 },
+  { word: '武汉', user: 4, count: 220 },
+  { word: '四川', user: 5, count: 240 },
+  { word: '南京', user: 5, count: 250 },
+  { word: '杭州', user: 2, count: 220 },
+  { word: '日本', user: 4, count: 240 },
+  { word: '韩国', user: 5, count: 250 },
+  { word: '菲律宾', user: 3, count: 220 }
+])
 
 Mock.mock('http://localhost:8080' + '/screen/data', {
   status: 0,
