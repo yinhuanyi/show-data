@@ -71,7 +71,9 @@
 <script>
    // 之类先将eslint语法检查禁止一下
   /* eslint-disable */
+  import commonDataMixin from '@/mixins/commonDataMixin'
   export default {
+    mixins: [commonDataMixin],
     // 2：返回echarts绘图相关的options数据 data
     data () {
       return {
@@ -116,10 +118,27 @@
           ]
         },
         // 左边的柱状图
-        chartOption: {
+        chartOption: {}
+      }
+    },
+    methods: {
+      // 当item被选中的时候，会传递一个item的index，让这个被选中的item变为active
+      onMenuselect (index) {
+        this.activeIndex = index
+        // 如果选择的是1，渲染销售额
+        if (index === '1') {
+          this.render(this.orderFullYear, this.orderFullYearAxis, '年度销售额')
+        } else {
+          this.render(this.userFullYear, this.userFullYearAxis, '年度用户访问量')
+        }
+      },
+      // render方法, title的传递是由于点击了menu之后，title会变化
+      render (data, axis, title) {
+        // 替换参数的值，给chartOption变量赋值
+        this.chartOption = {
           // 设置title
           title: {
-            text: '年度销售额',
+            text: title,
             textStyle: {
               fontSize: 12,
               color: '#666'
@@ -130,7 +149,7 @@
           // 设置x轴坐标
           xAxis: {
             type: 'category',
-            data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+            data: axis,
             // 设置刻度线样式
             axisTick: {
               // show: false, 这属性可以设置刻度线的显示和隐藏
@@ -170,7 +189,7 @@
             {
               type: 'bar',
               barWidth: '35%',
-              data: [200, 250, 300, 1050, 200, 250, 300, 350, 200, 250, 300, 350, ]
+              data: data
             }
           ],
           color: ['#339874'],
@@ -181,51 +200,19 @@
             right: 60,
             bottom: 50
           }
-        },
-        // 右边排名的数据
-        rankData: [
-          {
-            no: 1,
-            name: '麦当劳',
-            money: '234,234'
-          },
-          {
-            no: 2,
-            name: '麦当劳',
-            money: '234,234'
-          },
-          {
-            no: 3,
-            name: '麦当劳',
-            money: '234,234'
-          },
-          {
-            no: 4,
-            name: '麦当劳',
-            money: '234,234'
-          },
-          {
-            no: 5,
-            name: '麦当劳',
-            money: '234,234'
-          },
-          {
-            no: 6,
-            name: '麦当劳',
-            money: '234,234'
-          },
-          {
-            no: 7,
-            name: '麦当劳',
-            money: '234,234'
-          }
-        ]
+        }
       }
     },
-    methods: {
-      // 当item被选中的时候，会传递一个item的index，让这个被选中的item变为active
-      onMenuselect (index) {
-        this.activeIndex = index
+    // 监控orderFullYear计算属性的变化
+    watch: {
+      // 只有刷新页面，orderFullYear数据就变化，那么就会调用render函数
+      orderFullYear () {
+        this.render(this.orderFullYear, this.orderFullYearAxis, '年度销售额')
+      }
+    },
+    computed: {
+      rankData () {
+        return this.activeIndex === '1' ? this.orderRank : this.userRank
       }
     }
   }

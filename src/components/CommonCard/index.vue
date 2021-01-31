@@ -20,7 +20,8 @@
     // 接收父组件传递的数据
     props: {
       title: String,
-      value: String
+      // 这里是让value支持两种数据类型
+      value: [String, Number]
     }
   }
 </script>

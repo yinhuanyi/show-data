@@ -30,7 +30,7 @@ export default {
     reportData () {
       // 调用this.getReportData()函数的时候，无法获取数据，返回null
       // 但是在显示的时候又有数据了
-      console.log('这里好像没有数据: ' + this.getReportData())
+      // console.log('这里好像没有数据: ' + this.getReportData())
       return this.getReportData()
     },
     // 获取reportData计算属性中的数据
@@ -49,6 +49,7 @@ export default {
     salesLastDay () {
       return wrapperNumber(this.reportData, 'salesLastDay')
     },
+    // 这里是返回TotalOrder数据
     // 返回格式化数值
     orderToday () {
       return wrapperNumber(this.reportData, 'orderToday')
@@ -58,6 +59,51 @@ export default {
     },
     orderTrend () {
       return wrapperArray(this.reportData, 'orderTrend')
+    },
+    // 这里是返回TodayUsers数据
+    orderUser () {
+      return wrapperNumber(this.reportData, 'orderUser')
+    },
+    returnRate () {
+      return wrapperPercentage(this.reportData, 'returnRate')
+    },
+    orderUserTrend () {
+      return wrapperArray(this.reportData, 'orderUserTrend')
+    },
+    orderUserTrendAxis () {
+      return wrapperArray(this.reportData, 'orderUserTrendAxis')
+    },
+    // 这里是返回TotalUsers数据
+    userToday () {
+      return wrapperNumber(this.reportData, 'userToday')
+    },
+    userGrowthLastDay () {
+      return wrapperNumber(this.reportData, 'userGrowthLastDay')
+    },
+    userGrowthLastMonth () {
+      return wrapperNumber(this.reportData, 'userGrowthLastMonth')
+    },
+    userLastMonth () {
+      return wrapperNumber(this.reportData, 'userLastMonth')
+    },
+    // 这里是SalesView/index.vue数据
+    orderFullYear () {
+      return wrapperArray(this.reportData, 'orderFullYear')
+    },
+    orderFullYearAxis () {
+      return wrapperArray(this.reportData, 'orderFullYearAxis')
+    },
+    orderRank () {
+      return wrapperArray(this.reportData, 'orderRank')
+    },
+    userFullYear () {
+      return wrapperArray(this.reportData, 'userFullYear')
+    },
+    userFullYearAxis () {
+      return wrapperArray(this.reportData, 'userFullYearAxis')
+    },
+    userRank () {
+      return wrapperArray(this.reportData, 'userRank')
     },
     // 第二个接口返回的数据
     getWordcloud () {

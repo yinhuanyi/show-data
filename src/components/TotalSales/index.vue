@@ -17,8 +17,6 @@
     <template v-slot:footer>
       <span>昨日销售额：</span>
       <span class="emphasis">$ {{salesLastDay}}</span>
-      <!-- 在这里展示父组件的数据 -->
-<!--      <div>从父组件获取的数据：{{reportData}}</div>-->
     </template>
   </common-card>
 </template>

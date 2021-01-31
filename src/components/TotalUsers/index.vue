@@ -1,15 +1,15 @@
 <template>
-  <common-card title="累计销售额" value="$ 1999">
+  <common-card title="累计销售额" :value="userToday">
     <template>
       <v-chart :options="getOptions()"></v-chart>
     </template>
     <template v-slot:footer>
       <div class="total-users-footer">
         <span>日同比</span>
-        <span class="emphasis">1.87%</span>
+        <span class="emphasis">{{userGrowthLastDay}}</span>
         <div class="increase"></div>
         <span class="month">月同比</span>
-        <span class="emphasis">2.87%</span>
+        <span class="emphasis">{{userGrowthLastMonth}}</span>
         <div class="decrease"></div>
       </div>
     </template>
@@ -18,9 +18,11 @@
 
 <script>
 import commonCardMixin from '@/mixins/commonCardMixin'
+// 引入mixin
+import commonDataMixin from '@/mixins/commonDataMixin'
 
 export default {
-  mixins: [commonCardMixin],
+  mixins: [commonCardMixin, commonDataMixin],
   methods: {
     getOptions () {
       return {
@@ -36,11 +38,12 @@ export default {
         },
         series: [
           {
+            name: '上月平台用户数',
             // 将两个柱状绘制在一起，可以让stack取同样的名字
             stack: '总量',
             type: 'bar',
             // 第一个柱的数值
-            data: [100],
+            data: [this.userLastMonth],
             // 宽度
             barWidth: 10,
             itemStyle: {
@@ -48,11 +51,12 @@ export default {
             }
           },
           {
+            name: '今日平台用户数',
             // 将两个柱状绘制在一起，可以让stack取同样的名字
             stack: '总量',
             type: 'bar',
             // 第二个柱的数值
-            data: [250],
+            data: [this.userToday],
             barWidth: 10,
             itemStyle: {
               color: 'green'
@@ -62,7 +66,7 @@ export default {
             // 这个图形是自定义系列
             type: 'custom',
             // 让箭头的数值与第一个柱保持一致
-            data: [100],
+            data: [this.userLastMonth],
             stack: '总量',
             // 返回图形
             renderItem: (params, api) => {

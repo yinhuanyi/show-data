@@ -1,23 +1,26 @@
 <template>
-  <common-card  title="今日交易用户数" value="7,346">
+  <common-card  title="今日交易用户数" :value="orderUser">
     <template>
       <v-chart :options="getOptions()" />
     </template>
     <template v-slot:footer>
       <span>订单成功率</span>
-      <span class="emphasis">78%</span>
+      <span class="emphasis">{{returnRate}}</span>
     </template>
   </common-card>
 </template>
 
 <script>
 import commonCardMixin from '@/mixins/commonCardMixin'
+// 引入mixin
+import commonDataMixin from '@/mixins/commonDataMixin'
 
 export default {
-  mixins: [commonCardMixin],
+  mixins: [commonCardMixin, commonDataMixin],
   methods: {
     getOptions () {
       return {
+        tooltip: {},
         title: {
           text: '交易用户',
           textStyle: {
@@ -30,16 +33,17 @@ export default {
         color: ['green'],
         xAxis: {
           show: false,
-          data: ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00']
+          data: this.orderUserTrendAxis
         },
         yAxis: {
           show: false
         },
         series: [{
           // 类型是折线图
+          name: '实时交易量',
           type: 'bar',
-          // 指定数据，这里可以使用dataset替换
-          data: [532, 240, 124, 290, 149, 267, 243, 154, 255, 249, 1000],
+          // 指定数据，这里可以使用dataset替换 this.orderUserTrend,
+          data: this.orderUserTrend,
           barWidth: '60%'
         }],
         // 设置图表在div中的绝对定位

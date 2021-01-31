@@ -1,25 +1,31 @@
 <template>
-  <common-card title="累计订单量" value="278424">
+  <common-card title="累计订单量" :value="orderToday">
     <template>
       <!--   1：使用v-chart标签，基于getOptions()方法返回的数据，渲染图表   -->
       <v-chart :options="getOptions()"/>
     </template>
     <template v-slot:footer>
       <span style="width:100%;height:100%">昨日订单量</span>
-      <span class="emphasis">$ 349</span>
+      <span class="emphasis">{{orderLastDay}}</span>
     </template>
   </common-card>
 </template>
 
 <script>
 import commonCardMixin from '@/mixins/commonCardMixin'
+// 引入mixin
+import commonDataMixin from '@/mixins/commonDataMixin'
 
 export default {
-  mixins: [commonCardMixin],
+  mixins: [commonCardMixin, commonDataMixin],
   methods: {
     // 定义一个getOptions()方法，返回图表的options配置参数
     getOptions () {
-      return {
+      // 判断一下，orderTrend数组>0，才返回结果, 否则直接返回null
+      // 下面是一个三元运算符
+      return this.orderTrend.length > 0
+       ? {
+        tooltip: {},
         xAxis: {
           type: 'category',
           show: false,
@@ -29,8 +35,9 @@ export default {
           show: false
         },
         series: [{
+          name: '累计订单量',
           type: 'line',
-          data: [1032, 240, 124, 390, 149, 267, 243, 154, 255, 249, 1032, 240, 124, 390, 149, 267, 243, 154, 255, 249],
+          data: this.orderTrend,
           areaStyle: {
             color: 'rgba(95, 187, 255, .5)'
           },
@@ -39,7 +46,7 @@ export default {
             width: 0
           },
           itemStyle: {
-            opacity: 0
+            opacity: 1
           }
         }],
         grid: {
@@ -48,7 +55,7 @@ export default {
           left: 0,
           right: 0
         }
-      }
+      } : null
     }
   }
 }
