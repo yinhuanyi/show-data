@@ -260,6 +260,7 @@
     mounted () {
       this.randerPieChar()
     }
+
   }
 </script>
 
