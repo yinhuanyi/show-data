@@ -110,6 +110,19 @@ Mock.mock('http://localhost:8080' + '/screen/data', {
       money: '234,234'
     }
   ],
+  // category.data1
+  category: {
+    data1: {
+      axisX: ['BTC', 'ETH', 'FIL'],
+      data1: [78, 78, 67],
+      data2: []
+    },
+    data2: {
+      axisX: ['BTC1', 'ETH2', 'FIL3'],
+      data1: [38, 23, 43],
+      data2: []
+    }
+  },
   msg: ''
 })
 
